@@ -24,6 +24,7 @@ public class PlayerMover : MonoBehaviour
     {
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerMovement, cmd => { movementCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumControl, cmd => { getVacuumCommand(cmd); });
+        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumSwitch, cmd => { vacuumSwitch(cmd); });
     }
 
     void movementCommand(PlayerMovementCommand cmd)
@@ -129,12 +130,12 @@ public class PlayerMover : MonoBehaviour
             // 使用AddForce方法来施加力，使物体移动向中心
             if (attractedObject.CompareTag("Player"))
             {
-                rb.AddForce(direction * vacuumPower_*3f);
+                rb.AddForce(direction * vacuumPower_*2f);
 
             }
             else
             {
-                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.08f)
+                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.65f)
                 {
                     var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
                     nowArrayPlace += 1;
@@ -144,6 +145,14 @@ public class PlayerMover : MonoBehaviour
                 }
                 rb.AddForce(direction * vacuumPower_ * percentage * percentage);
             }
+        }
+    }
+
+    void vacuumSwitch(PlayerVacuumSwitchCommand cmd)
+    {
+        if (cmd.PlayerIdentity == thisPlayerIdentity_)
+        {
+            isVacuuming_ = cmd.Trigger;
         }
     }
     private void OnDrawGizmos()
