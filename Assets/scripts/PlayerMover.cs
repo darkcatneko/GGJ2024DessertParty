@@ -20,11 +20,23 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] List<GameObject> objectInRadius = new List<GameObject>();
     [SerializeField] int[] ingredientArray = new int[3];
     [SerializeField] int nowArrayPlace = -1;
+    [SerializeField] private SpriteRenderer PlayerWalktransform;
+
+    bool IsMoveRight = false;
+    bool IsMoveLeft = false;
+
     void Start()
     {
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerMovement, cmd => { movementCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumControl, cmd => { getVacuumCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumSwitch, cmd => { vacuumSwitch(cmd); });
+        //var PlayerWalktransform = this.gameObject.transform.Find("PlayerWalk1-1");
+        //if (PlayerWalktransform != null)
+        //{
+        //    PlayerWalktransform.GetComponent<SpriteRenderer>();
+        //}
+
+
     }
 
     void movementCommand(PlayerMovementCommand cmd)
@@ -41,7 +53,25 @@ public class PlayerMover : MonoBehaviour
     }
     private void FixedUpdate()
     {
+
         rigidbody2D_.velocity = new Vector2(horizontal * runSpeed_, vertical * runSpeed_);
+        if (vertical > 0) 
+        {
+            IsMoveRight = true;
+        }
+        if (vertical < 0) 
+        {
+            IsMoveLeft = true;
+        }
+        if (IsMoveRight & !IsMoveLeft)
+        {
+            PlayerWalktransform.flipX = false;
+        }
+        if (IsMoveLeft & !IsMoveRight)
+        {
+            PlayerWalktransform.flipX = true;
+        }
+
     }
     void getVacuumCommand(PlayerVacuumControlCommand cmd)
     {
