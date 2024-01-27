@@ -148,7 +148,7 @@ public class PlayerMover : MonoBehaviour
     void vacuum()
     {
         var attractorCenter = this.gameObject.transform.position;
-        if (!isVacuuming_) return;
+        if (!isVacuuming_ || nowArrayPlace >= 2) return;
         // 遍历列表中的所有物体
         foreach (GameObject attractedObject in objectInRadius)
         {
@@ -165,7 +165,7 @@ public class PlayerMover : MonoBehaviour
             }
             else
             {
-                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.65f)
+                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.65f&&nowArrayPlace<2)
                 {
                     var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
                     nowArrayPlace += 1;
