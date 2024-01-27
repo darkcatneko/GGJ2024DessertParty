@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using Gamemanager;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Gamemanager;
-using System.Security.Principal;
 using UnityEngine.SceneManagement;
 
 public class GamepadController : MonoBehaviour
 {
     [SerializeField] Vector2 inputValue_;
     [SerializeField] PlayerIdentity playerIdentity_;
-
+    [SerializeField] Vector2 vacuumInputValue_;
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -20,23 +17,31 @@ public class GamepadController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(inputValue_);
+        //Debug.Log(inputValue_);
         GameManager.Instance.MainGameEvent.Send(new PlayerMovementCommand() { PlayerIdentity = playerIdentity_, PlayerMovementVector = inputValue_ });
     }
 
     void OnPlayerMovement(InputValue value)
     {
-        inputValue_ = value.Get<Vector2>();      
+        inputValue_ = value.Get<Vector2>();
     }
-     
+
     void OnPlayerReadyGo()
     {
         var allClear = GameManager.Instance.GamepadRegister.CheckAllClear();
 
         if (allClear)
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("MainGameScene");
         }
+    }
+    void OnPlayerVacuumControl(InputValue value)
+    {
+        if (value.Get<Vector2>() != Vector2.zero)
+        {
+            GameManager.Instance.MainGameEvent.Send(new PlayerVacuumControlCommand() { PlayerIdentity = playerIdentity_, PlayerVacuumVector = value.Get<Vector2>() });
+        }
+
     }
 }
 public enum PlayerIdentity

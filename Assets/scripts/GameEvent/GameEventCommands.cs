@@ -10,6 +10,10 @@ namespace Gamemanager
         public PlayerIdentity PlayerIdentity;
         public Vector2 PlayerMovementVector;
     }
-
+    public class PlayerVacuumControlCommand:GameEventMessageBase 
+    {
+        public PlayerIdentity PlayerIdentity;
+        public Vector2 PlayerVacuumVector;
+    }
 
 }
