@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using TMPro;
 using UnityEngine;
 
 namespace Gamemanager
@@ -10,18 +7,23 @@ namespace Gamemanager
         public PlayerIdentity PlayerIdentity;
         public Vector2 PlayerMovementVector;
     }
-    public class PlayerVacuumControlCommand:GameEventMessageBase 
+    public class PlayerVacuumControlCommand : GameEventMessageBase
     {
         public PlayerIdentity PlayerIdentity;
         public Vector2 PlayerVacuumVector;
     }
-    public class PlayerVacuumSwitchCommand:GameEventMessageBase
+    public class PlayerVacuumSwitchCommand : GameEventMessageBase
     {
         public PlayerIdentity PlayerIdentity;
         public bool Trigger;
     }
-    public class PlayerShootTriggerCommand:GameEventMessageBase 
+    public class PlayerShootTriggerCommand : GameEventMessageBase
     {
-        public PlayerIdentity PlayerIdentity; 
+        public PlayerIdentity PlayerIdentity;
+    }
+
+    public class PlayerGetIngredientCommand : GameEventMessageBase
+    {
+        public IngredientType IngredientType;
     }
 }

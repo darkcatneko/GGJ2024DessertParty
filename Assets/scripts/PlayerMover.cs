@@ -180,6 +180,7 @@ public class PlayerMover : MonoBehaviour
                     var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
                     nowArrayPlace += 1;
                     ingredientArray[nowArrayPlace] = (int)id;
+                    GameManager.Instance.MainGameEvent.Send(new PlayerGetIngredientCommand() { IngredientType = id });
                     Destroy(attractedObject.gameObject);
                     return;
                 }

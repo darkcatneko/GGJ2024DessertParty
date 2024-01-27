@@ -23,6 +23,10 @@ public class BulletInfo : MonoBehaviour
             collision.gameObject.GetComponent<Rigidbody2D>().AddForce(force_ * dir);
             Destroy(this.gameObject);
         }
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void timer()
