@@ -110,7 +110,7 @@ public class PlayerMover : MonoBehaviour
             angleInDegrees += 360f;
         }
         return angleInDegrees;
-        Debug.Log("角度：" + angleInDegrees);
+        
     }
     void vacuum()
     {
