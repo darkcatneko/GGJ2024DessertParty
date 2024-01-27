@@ -15,5 +15,9 @@ namespace Gamemanager
         public PlayerIdentity PlayerIdentity;
         public Vector2 PlayerVacuumVector;
     }
-
+    public class PlayerVacuumSwitchCommand:GameEventMessageBase
+    {
+        public PlayerIdentity PlayerIdentity;
+        public bool Trigger;
+    }
 }
