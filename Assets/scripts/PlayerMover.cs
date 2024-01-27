@@ -18,6 +18,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] float vacuumPower_;
     [SerializeField] List<GameObject> collectedObjects = new List<GameObject>();
     [SerializeField] List<GameObject> objectInRadius = new List<GameObject>();
+    [SerializeField] int[] ingredientArray = new int[3];
+    [SerializeField] int nowArrayPlace = -1;
     void Start()
     {
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerMovement, cmd => { movementCommand(cmd); });
@@ -117,9 +119,9 @@ public class PlayerMover : MonoBehaviour
         var attractorCenter = this.gameObject.transform.position;
         if (!isVacuuming_) return;
         // 遍历列表中的所有物体
-        // 遍历列表中的所有物体
         foreach (GameObject attractedObject in objectInRadius)
         {
+            if (attractedObject == null) return;            
             // 计算朝向中心点的方向
             var rb = attractedObject.GetComponent<Rigidbody2D>();
             Vector2 direction = (attractorCenter - attractedObject.transform.position).normalized;
@@ -132,6 +134,14 @@ public class PlayerMover : MonoBehaviour
             }
             else
             {
+                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.08f)
+                {
+                    var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
+                    nowArrayPlace += 1;
+                    ingredientArray[nowArrayPlace] = (int)id;
+                    Destroy(attractedObject.gameObject);
+                    return;
+                }
                 rb.AddForce(direction * vacuumPower_ * percentage * percentage);
             }
         }
