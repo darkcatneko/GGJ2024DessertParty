@@ -12,4 +12,6 @@ public class MainGameEventPack : GameEventPack
     public IObservable<PlayerVacuumControlCommand> OnPlayerVacuumControl=> getSubject<PlayerVacuumControlCommand>();
 
     public IObservable<PlayerVacuumSwitchCommand> OnPlayerVacuumSwitch => getSubject<PlayerVacuumSwitchCommand>();
+
+    public IObservable<PlayerShootTriggerCommand> OnPlayerShootTrigger => getSubject<PlayerShootTriggerCommand>();
 }

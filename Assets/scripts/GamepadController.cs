@@ -48,6 +48,11 @@ public class GamepadController : MonoBehaviour
     {
         GameManager.Instance.MainGameEvent.Send(new PlayerVacuumSwitchCommand() {PlayerIdentity = playerIdentity_, Trigger = value.isPressed });
     }
+
+    void OnPlayerShootTrigger()
+    {
+        GameManager.Instance.MainGameEvent.Send(new PlayerShootTriggerCommand());
+    }
 }
 public enum PlayerIdentity
 {

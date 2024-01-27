@@ -1,11 +1,16 @@
 using Gamemanager;
+using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class PlayerMover : MonoBehaviour
 {
     float horizontal;
     float vertical;
+    public bool CanMove = true;
     [SerializeField] bool isVacuuming_;
     [SerializeField] LayerMask targetLayers_;
     [SerializeField] PlayerIdentity thisPlayerIdentity_;
@@ -21,6 +26,9 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] int[] ingredientArray = new int[3];
     [SerializeField] int nowArrayPlace = -1;
     [SerializeField] private SpriteRenderer PlayerWalktransform;
+    [SerializeField] GameObject playerBulletPrefab_;
+    [SerializeField] GameObject bulletSpawnPlace_;
+    [SerializeField] float bulletShootForce_;
 
     [SerializeField] bool IsMoveRight = false;
     
@@ -30,11 +38,7 @@ public class PlayerMover : MonoBehaviour
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerMovement, cmd => { movementCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumControl, cmd => { getVacuumCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumSwitch, cmd => { vacuumSwitch(cmd); });
-        //var PlayerWalktransform = this.gameObject.transform.Find("PlayerWalk1-1");
-        //if (PlayerWalktransform != null)
-        //{
-        //    PlayerWalktransform.GetComponent<SpriteRenderer>();
-        //}
+        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerShootTrigger, cmd => { playerShooterTrigger(cmd); });        
 
 
     }
@@ -53,8 +57,15 @@ public class PlayerMover : MonoBehaviour
     }
     private void FixedUpdate()
     {
-
-        rigidbody2D_.velocity = new Vector2(horizontal * runSpeed_, vertical * runSpeed_);
+        if (CanMove)
+        {
+            rigidbody2D_.velocity = new Vector2(horizontal * runSpeed_, vertical * runSpeed_);
+        }
+        else
+        {
+            horizontal = 0; 
+            vertical = 0;
+        }
         if (horizontal > 0)
         {
             if (!IsMoveRight)
@@ -70,16 +81,7 @@ public class PlayerMover : MonoBehaviour
                 PlayerWalktransform.flipX = false;
                 IsMoveRight = false;
             }
-        }
-        //if (IsMoveRight & !IsMoveLeft)
-        //{
-        //    PlayerWalktransform.flipX = false;
-        //}
-        //if (IsMoveLeft & !IsMoveRight)
-        //{
-        //    PlayerWalktransform.flipX = true;
-        //}
-
+        }       
     }
     void getVacuumCommand(PlayerVacuumControlCommand cmd)
     {
@@ -192,6 +194,48 @@ public class PlayerMover : MonoBehaviour
         {
             isVacuuming_ = cmd.Trigger;
         }
+    }
+
+    void playerShooterTrigger(PlayerShootTriggerCommand cmd)
+    {
+        if (cmd.PlayerIdentity!= thisPlayerIdentity_)
+        {
+            return;
+        }
+        if (nowArrayPlace == 2)
+        {
+            nowArrayPlace = -1;
+            var bulletObject = Instantiate(playerBulletPrefab_, bulletSpawnPlace_.transform.position, Quaternion.identity);
+            var dir = (bulletSpawnPlace_.transform.position - this.gameObject.transform.position).normalized;
+            bulletObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletShootForce_, ForceMode2D.Impulse);
+            var info = bulletObject.GetComponent<BulletInfo>();
+            info.fromWhichPlayer_ = thisPlayerIdentity_;
+            Array.Sort(ingredientArray);
+            for (int i = 0; i < ingredientArray.Length; i++)
+            {
+                info.Ingredients[i] = ingredientArray[i];
+            }
+            ingredientArray = new int[3];
+        }
+    }
+
+    public async void Timer()
+    {
+        if (!CanMove)
+        {
+            await Task.Delay(1500);
+            CanMove = true;
+
+        }
+    }
+
+    public bool IdentityChecker(PlayerIdentity target)
+    {
+        if (target == thisPlayerIdentity_)
+        {
+            return true;
+        }
+        return false;
     }
     private void OnDrawGizmos()
     {

@@ -20,4 +20,8 @@ namespace Gamemanager
         public PlayerIdentity PlayerIdentity;
         public bool Trigger;
     }
+    public class PlayerShootTriggerCommand:GameEventMessageBase 
+    {
+        public PlayerIdentity PlayerIdentity; 
+    }
 }
