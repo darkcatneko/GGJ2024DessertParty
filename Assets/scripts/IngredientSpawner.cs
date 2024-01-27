@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class IngredientSpawner : MonoBehaviour
@@ -10,6 +11,9 @@ public class IngredientSpawner : MonoBehaviour
     public float maxY = 2.7f;
 
     public GameObject[] IngredientPrefab;
+    [SerializeField] Animator[] cannonAnimators_;
+    [SerializeField] GameObject[] cannonSpawnPos_;
+    [SerializeField] Vector2[] cannonDir_;
 
     private float randomX;
     private float randomY;
@@ -76,4 +80,13 @@ public class IngredientSpawner : MonoBehaviour
         }
     }
 
+    void spawnIngredient(IngredientType ingredientType)
+    {
+        var randomNum = Random.Range(0, 8);
+        var spawnPos = cannonSpawnPos_[randomNum].transform.position;
+        var prefab = IngredientPrefab[(int)ingredientType];
+        var ingredientObject = Instantiate(prefab, spawnPos, Quaternion.identity);
+        ingredientObject.gameObject.GetComponent<Rigidbody2D>().AddForce(cannonDir_[randomNum]);
+        cannonAnimators_[randomNum].CrossFadeInFixedTime("Boom", 0.05f);
+    }
 }
