@@ -22,8 +22,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] int nowArrayPlace = -1;
     [SerializeField] private SpriteRenderer PlayerWalktransform;
 
-    bool IsMoveRight = false;
-    bool IsMoveLeft = false;
+    [SerializeField] bool IsMoveRight = false;
+    
 
     void Start()
     {
@@ -55,22 +55,30 @@ public class PlayerMover : MonoBehaviour
     {
 
         rigidbody2D_.velocity = new Vector2(horizontal * runSpeed_, vertical * runSpeed_);
-        if (vertical > 0) 
+        if (horizontal > 0)
         {
-            IsMoveRight = true;
+            if (!IsMoveRight)
+            {
+                PlayerWalktransform.flipX = true;
+                IsMoveRight = true;
+            }
         }
-        if (vertical < 0) 
+        if (horizontal < 0)
         {
-            IsMoveLeft = true;
+            if (IsMoveRight)
+            {
+                PlayerWalktransform.flipX = false;
+                IsMoveRight = false;
+            }
         }
-        if (IsMoveRight & !IsMoveLeft)
-        {
-            PlayerWalktransform.flipX = false;
-        }
-        if (IsMoveLeft & !IsMoveRight)
-        {
-            PlayerWalktransform.flipX = true;
-        }
+        //if (IsMoveRight & !IsMoveLeft)
+        //{
+        //    PlayerWalktransform.flipX = false;
+        //}
+        //if (IsMoveLeft & !IsMoveRight)
+        //{
+        //    PlayerWalktransform.flipX = true;
+        //}
 
     }
     void getVacuumCommand(PlayerVacuumControlCommand cmd)
@@ -143,7 +151,7 @@ public class PlayerMover : MonoBehaviour
             angleInDegrees += 360f;
         }
         return angleInDegrees;
-        
+
     }
     void vacuum()
     {
@@ -152,7 +160,7 @@ public class PlayerMover : MonoBehaviour
         // 遍历列表中的所有物体
         foreach (GameObject attractedObject in objectInRadius)
         {
-            if (attractedObject == null) return;            
+            if (attractedObject == null) return;
             // 计算朝向中心点的方向
             var rb = attractedObject.GetComponent<Rigidbody2D>();
             Vector2 direction = (attractorCenter - attractedObject.transform.position).normalized;
@@ -160,12 +168,12 @@ public class PlayerMover : MonoBehaviour
             // 使用AddForce方法来施加力，使物体移动向中心
             if (attractedObject.CompareTag("Player"))
             {
-                rb.AddForce(direction * vacuumPower_*2f);
+                rb.AddForce(direction * vacuumPower_ * 2f);
 
             }
             else
             {
-                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.65f&&nowArrayPlace<2)
+                if ((attractorCenter - attractedObject.transform.position).magnitude <= 0.65f && nowArrayPlace < 2)
                 {
                     var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
                     nowArrayPlace += 1;
