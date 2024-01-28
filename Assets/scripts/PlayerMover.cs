@@ -1,10 +1,8 @@
 using Gamemanager;
-using System.Collections;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
@@ -31,14 +29,14 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] float bulletShootForce_;
 
     [SerializeField] bool IsMoveRight = false;
-    
+
 
     void Start()
     {
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerMovement, cmd => { movementCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumControl, cmd => { getVacuumCommand(cmd); });
         GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerVacuumSwitch, cmd => { vacuumSwitch(cmd); });
-        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerShootTrigger, cmd => { playerShooterTrigger(cmd); });        
+        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerShootTrigger, cmd => { playerShooterTrigger(cmd); });
 
 
     }
@@ -63,7 +61,7 @@ public class PlayerMover : MonoBehaviour
         }
         else
         {
-            horizontal = 0; 
+            horizontal = 0;
             vertical = 0;
         }
         if (horizontal > 0)
@@ -81,7 +79,7 @@ public class PlayerMover : MonoBehaviour
                 PlayerWalktransform.flipX = false;
                 IsMoveRight = false;
             }
-        }       
+        }
     }
     void getVacuumCommand(PlayerVacuumControlCommand cmd)
     {
@@ -199,13 +197,14 @@ public class PlayerMover : MonoBehaviour
 
     void playerShooterTrigger(PlayerShootTriggerCommand cmd)
     {
-        if (cmd.PlayerIdentity!= thisPlayerIdentity_)
+        if (cmd.PlayerIdentity != thisPlayerIdentity_)
         {
             return;
         }
         if (nowArrayPlace == 2)
         {
             nowArrayPlace = -1;
+            //播放發射音效
             var bulletObject = Instantiate(playerBulletPrefab_, bulletSpawnPlace_.transform.position, Quaternion.identity);
             var dir = (bulletSpawnPlace_.transform.position - this.gameObject.transform.position).normalized;
             bulletObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletShootForce_, ForceMode2D.Impulse);
@@ -237,6 +236,13 @@ public class PlayerMover : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public PlayerIdentity GetIdentity()
+    {
+        return thisPlayerIdentity_;
+
+        GameManager.Instance.MainGameEvent.Send(new GameTimeUpCommand());
     }
     private void OnDrawGizmos()
     {

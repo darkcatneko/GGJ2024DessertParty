@@ -1,23 +1,23 @@
 ﻿using UniRx;
 namespace Gamemanager
 {
-    using System.Collections.Generic;
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
 
     interface IEventPublisher
     {
         void Send(GameEventMessageBase msg);
     }
-    
+
     /// <summary>
     /// ゲーム事件のまとめ
     /// </summary>
     public abstract class GameEventPack : IEventPublisher
     {
-        Dictionary<Type,IEventPublisher> eventPublishers_ = new();
-       
-        
+        Dictionary<Type, IEventPublisher> eventPublishers_ = new();
+
+
         /// <summary>
         /// 通知を送るメソッド
         /// </summary>
@@ -34,7 +34,7 @@ namespace Gamemanager
             if (!eventPublishers_.TryGetValue(typeof(T), out var publisher))
             {
                 var subject = new GameMessageSubject<T>();
-                eventPublishers_.Add(typeof(T),subject);
+                eventPublishers_.Add(typeof(T), subject);
                 publisher = subject;
             }
 

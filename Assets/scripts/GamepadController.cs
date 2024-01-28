@@ -46,7 +46,7 @@ public class GamepadController : MonoBehaviour
 
     void OnPlayerVacuumSwitch(InputValue value)
     {
-        GameManager.Instance.MainGameEvent.Send(new PlayerVacuumSwitchCommand() {PlayerIdentity = playerIdentity_, Trigger = value.isPressed });
+        GameManager.Instance.MainGameEvent.Send(new PlayerVacuumSwitchCommand() { PlayerIdentity = playerIdentity_, Trigger = value.isPressed });
     }
 
     void OnPlayerShootTrigger()

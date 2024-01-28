@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class IngredientSpawner : MonoBehaviour
@@ -21,7 +18,7 @@ public class IngredientSpawner : MonoBehaviour
     void Start()
     {
         IngredientTypes(GenerateShuffledArray(0, 21));
-        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerGetIngredient, cmd => { spawnIngredient(cmd.IngredientType);  });
+        GameManager.Instance.MainGameEvent.SetSubscribe(GameManager.Instance.MainGameEvent.OnPlayerGetIngredient, cmd => { spawnIngredient(cmd.IngredientType); });
     }
     void Update()
     {
@@ -54,10 +51,10 @@ public class IngredientSpawner : MonoBehaviour
             int temp = array[i];
             array[i] = array[randomIndex];
             array[randomIndex] = temp;
-            
+
         }
 
-    } 
+    }
     public void RandomPosition()
     {
         randomX = Random.Range(minX, maxX);
@@ -70,7 +67,7 @@ public class IngredientSpawner : MonoBehaviour
         {
             if (index >= 0 && index < IngredientPrefab.Length)
             {
-                GameObject IngredientPrefabs = IngredientPrefab [index];
+                GameObject IngredientPrefabs = IngredientPrefab[index];
                 RandomPosition();
                 Instantiate(IngredientPrefabs, transform.position = new Vector2(randomX, randomY), Quaternion.identity);
             }
@@ -87,7 +84,7 @@ public class IngredientSpawner : MonoBehaviour
         var spawnPos = cannonSpawnPos_[randomNum].transform.position;
         var prefab = IngredientPrefab[(int)ingredientType];
         var ingredientObject = Instantiate(prefab, spawnPos, Quaternion.identity);
-        ingredientObject.gameObject.GetComponent<Rigidbody2D>().AddForce(cannonDir_[randomNum]*135);
+        ingredientObject.gameObject.GetComponent<Rigidbody2D>().AddForce(cannonDir_[randomNum] * 135);
         cannonAnimators_[randomNum].CrossFadeInFixedTime("Boom", 0.05f);
     }
 }
