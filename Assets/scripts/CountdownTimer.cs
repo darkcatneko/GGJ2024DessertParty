@@ -4,14 +4,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
+using Gamemanager;
 
 public class GameTimeUpEvent : UnityEvent { }
 
 public class CountdownTimer : MonoBehaviour
 {
+
+    bool ended_ = false;
     public float TotalTime = 60.0f;
     private float CurrentTime;
-    public Text TimerText;
+    public TextMeshProUGUI TimerText;
 
     public GameTimeUpEvent OnGameTimeUp= new GameTimeUpEvent();
 
@@ -32,7 +36,11 @@ public class CountdownTimer : MonoBehaviour
         }
         else
         {
-            OnGameTimeUp.Invoke();
+            if (!ended_)
+            {
+                ended_ = true;
+                GameManager.Instance.MainGameEvent.Send(new GameTimeUpCommand());
+            }           
         }
     }
     void UpdatetimerText()
