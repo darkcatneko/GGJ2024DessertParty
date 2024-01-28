@@ -240,9 +240,7 @@ public class PlayerMover : MonoBehaviour
 
     public PlayerIdentity GetIdentity()
     {
-        return thisPlayerIdentity_;
-
-        GameManager.Instance.MainGameEvent.Send(new GameTimeUpCommand());
+        return thisPlayerIdentity_;        
     }
     private void OnDrawGizmos()
     {
