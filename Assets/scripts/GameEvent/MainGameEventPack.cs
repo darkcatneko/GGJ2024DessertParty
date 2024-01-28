@@ -16,4 +16,6 @@ public class MainGameEventPack : GameEventPack
     public IObservable<PlayerFinishQuestCommand> OnPlayerFinishQuest => getSubject<PlayerFinishQuestCommand>();
 
     public IObservable<GameTimeUpCommand> OnGameTimeUp => getSubject<GameTimeUpCommand>();
+
+    public IObservable<GameQuestUIUpdateCommand> OnGameQuestUIUpdate => getSubject<GameQuestUIUpdateCommand>();
 }

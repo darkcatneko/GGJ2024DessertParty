@@ -35,4 +35,8 @@ namespace Gamemanager
     {
 
     }
+    public class GameQuestUIUpdateCommand : GameEventMessageBase
+    {
+        public Quest Quest;
+    }
 }

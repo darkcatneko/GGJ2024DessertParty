@@ -1,3 +1,4 @@
+using Gamemanager;
 using System;
 using UnityEngine;
 
@@ -32,6 +33,8 @@ public class QuestSystem : MonoBehaviour
         result.ToPlayer = (PlayerIdentity)randomToPlayer;
         result.DessertType = (DessertType)randomDessert;
         result.Answer = genAnswer(randomDessert);
+        var send = result.Clone();
+        GameManager.Instance.MainGameEvent.Send(new GameQuestUIUpdateCommand() { Quest = send });
         return result;
     }
     int[] genAnswer(int randomDessert)
@@ -202,6 +205,17 @@ public struct Quest
     public PlayerIdentity ToPlayer;
     public DessertType DessertType;
     public int[] Answer;
+
+    public Quest Clone()
+    {
+        var answer = new int[3];
+        for (int i = 0; i < Answer.Length; i++)
+        {
+            answer[i] = Answer[i];
+        }
+        var result = new Quest() {FromPlayer = FromPlayer,ToPlayer = ToPlayer,DessertType = DessertType,Answer = answer };
+        return result;
+    }
 }
 
 public enum DessertType
