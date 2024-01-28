@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 
 public class MainSoundEffectManager : MonoBehaviour
@@ -16,6 +13,6 @@ public class MainSoundEffectManager : MonoBehaviour
     public void SpawnSE(int soundID)
     {
         var obj = Instantiate(sePrefab_);
-        sePrefab_.GetComponent<AudioSource>().PlayOneShot(AudioClips[soundID]);
+        obj.GetComponent<AudioSource>().PlayOneShot(AudioClips[soundID]);
     }
 }

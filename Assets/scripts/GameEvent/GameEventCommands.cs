@@ -26,6 +26,10 @@ namespace Gamemanager
     {
         public IngredientType IngredientType;
     }
+    public class PlayerVacuumFullCommand:GameEventMessageBase
+    {
+
+    }
     public class PlayerFinishQuestCommand : GameEventMessageBase
     {
         public PlayerIdentity FinishPlayerIdentity; 

@@ -12,6 +12,7 @@ public class GamepadController : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         playerIdentity_ = (PlayerIdentity)GameManager.Instance.GamepadRegister.GetEmptyPlayerSpot();
+        RegisterUI.Instance.MoveImage((int)playerIdentity_);
     }
 
     // Update is called once per frame

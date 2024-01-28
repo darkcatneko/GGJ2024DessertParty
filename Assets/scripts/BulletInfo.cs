@@ -22,6 +22,7 @@ public class BulletInfo : MonoBehaviour
             {
                 //告訴系統再生成一個任務
                 GameManager.Instance.MainGameEvent.Send(new PlayerFinishQuestCommand() { FinishPlayerIdentity = fromWhichPlayer_ });
+                MainSoundEffectManager.Instance.SpawnSE(6);
                 GameManager.Instance.Score++;
             }
             else
@@ -30,6 +31,7 @@ public class BulletInfo : MonoBehaviour
                 collision.gameObject.GetComponent<PlayerMover>().Timer();
                 var dir = (collision.gameObject.transform.position - this.transform.position).normalized;
                 collision.gameObject.GetComponent<Rigidbody2D>().AddForce(force_ * dir);
+                MainSoundEffectManager.Instance.SpawnSE(5);
             }          
             Destroy(this.gameObject);
         }

@@ -86,5 +86,6 @@ public class IngredientSpawner : MonoBehaviour
         var ingredientObject = Instantiate(prefab, spawnPos, Quaternion.identity);
         ingredientObject.gameObject.GetComponent<Rigidbody2D>().AddForce(cannonDir_[randomNum] * 135);
         cannonAnimators_[randomNum].CrossFadeInFixedTime("Boom", 0.05f);
+        MainSoundEffectManager.Instance.SpawnSE(7);
     }
 }

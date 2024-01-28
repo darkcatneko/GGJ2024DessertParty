@@ -27,7 +27,6 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] GameObject playerBulletPrefab_;
     [SerializeField] GameObject bulletSpawnPlace_;
     [SerializeField] float bulletShootForce_;
-
     [SerializeField] bool IsMoveRight = false;
 
 
@@ -178,7 +177,12 @@ public class PlayerMover : MonoBehaviour
                     var id = attractedObject.GetComponent<IngredientIdentity>().ThisIngredient;
                     nowArrayPlace += 1;
                     ingredientArray[nowArrayPlace] = (int)id;
-                    GameManager.Instance.MainGameEvent.Send(new PlayerGetIngredientCommand() { IngredientType = id });
+                    GameManager.Instance.MainGameEvent.Send(new PlayerGetIngredientCommand() { IngredientType = id });                   
+                    MainSoundEffectManager.Instance.SpawnSE(2);
+                    if (nowArrayPlace == 2)
+                    {
+                        MainSoundEffectManager.Instance.SpawnSE(3);
+                    }
                     Destroy(attractedObject.gameObject);
                     return;
                 }
@@ -192,6 +196,11 @@ public class PlayerMover : MonoBehaviour
         if (cmd.PlayerIdentity == thisPlayerIdentity_)
         {
             isVacuuming_ = cmd.Trigger;
+            if (isVacuuming_)
+            {
+                MainSoundEffectManager.Instance.SpawnSE(1);
+            }
+            
         }
     }
 
@@ -205,6 +214,7 @@ public class PlayerMover : MonoBehaviour
         {
             nowArrayPlace = -1;
             //播放發射音效
+            MainSoundEffectManager.Instance.SpawnSE(4);
             var bulletObject = Instantiate(playerBulletPrefab_, bulletSpawnPlace_.transform.position, Quaternion.identity);
             var dir = (bulletSpawnPlace_.transform.position - this.gameObject.transform.position).normalized;
             bulletObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletShootForce_, ForceMode2D.Impulse);

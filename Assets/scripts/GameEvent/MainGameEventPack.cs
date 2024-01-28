@@ -18,4 +18,5 @@ public class MainGameEventPack : GameEventPack
     public IObservable<GameTimeUpCommand> OnGameTimeUp => getSubject<GameTimeUpCommand>();
 
     public IObservable<GameQuestUIUpdateCommand> OnGameQuestUIUpdate => getSubject<GameQuestUIUpdateCommand>();
+    public IObservable<PlayerVacuumFullCommand> OnPlayerVacuumFull =>  getSubject<PlayerVacuumFullCommand>();
 }
