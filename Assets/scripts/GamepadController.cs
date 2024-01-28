@@ -51,7 +51,7 @@ public class GamepadController : MonoBehaviour
 
     void OnPlayerShootTrigger()
     {
-        GameManager.Instance.MainGameEvent.Send(new PlayerShootTriggerCommand());
+        GameManager.Instance.MainGameEvent.Send(new PlayerShootTriggerCommand() { PlayerIdentity= playerIdentity_ });
     }
 }
 public enum PlayerIdentity
